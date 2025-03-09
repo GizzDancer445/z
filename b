@@ -616,11 +616,13 @@ function Library:MakeWindow(WindowConfig)
 
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
-		MobileReopenButton.Visible = true
+		if UserInputService.TouchEnabled then
+			MobileReopenButton.Visible = true
+		end
 		UIHidden = true
 		Library:MakeNotification({
 			Name = "Interface Hidden",
-			Content = "Tap Left Control to reopen the interface",
+			Content = UserInputService.TouchEnabled and "Tap the button or Left Control to reopen the interface" or "Press Left Control to reopen the interface",
 			Time = 5
 		})
 		WindowConfig.CloseCallback()
