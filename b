@@ -25,28 +25,18 @@ local Library = {
 	SaveCfg = false
 }
 
+-- Remove external HTTP requests and icons
 local function GetIcon(IconName)
 	return nil
 end
 
 local Container = Instance.new("ScreenGui")
 Container.Name = string.char(math.random(65, 90))..tostring(math.random(100, 999))
-Container.DisplayOrder = 999999999
-Container.ZIndexBehavior = Enum.ZIndexBehavior.Global
-Container.IgnoreGuiInset = true
-Container.ResetOnSpawn = false
-
-if syn and syn.protect_gui then
-    syn.protect_gui(Container)
-    Container.Parent = game:GetService("CoreGui")
-elseif gethui then
-    Container.Parent = gethui()
-else
-    Container.Parent = game:GetService("CoreGui")
-end
+Container.DisplayOrder = 2147483647
+Container.Parent = game:GetService("CoreGui")
 
 function Library:IsRunning()
-	return Container and (Container.Parent == game:GetService("CoreGui") or (gethui and Container.Parent == gethui()))
+	return Container and Container.Parent == game:GetService("CoreGui")
 end
 
 local function AddConnection(Signal, Function)
@@ -626,13 +616,11 @@ function Library:MakeWindow(WindowConfig)
 
 	AddConnection(CloseBtn.MouseButton1Up, function()
 		MainWindow.Visible = false
-		if UserInputService.TouchEnabled then
-			MobileReopenButton.Visible = true
-		end
+		MobileReopenButton.Visible = true
 		UIHidden = true
 		Library:MakeNotification({
 			Name = "Interface Hidden",
-			Content = UserInputService.TouchEnabled and "Tap the button or Left Control to reopen the interface" or "Press Left Control to reopen the interface",
+			Content = "Tap Left Control to reopen the interface",
 			Time = 5
 		})
 		WindowConfig.CloseCallback()
@@ -1758,12 +1746,7 @@ local function CreateTween(instance, prop, value, time, tweenWait)
   end
 end
 
-local ScreenGui = Create("ScreenGui", Container, {
-    DisplayOrder = 999999999,
-    ZIndexBehavior = Enum.ZIndexBehavior.Global,
-    IgnoreGuiInset = true,
-    ResetOnSpawn = false
-})
+local ScreenGui = Create("ScreenGui", Container)
 
 local Menu_Notifi = Create("Frame", ScreenGui, {
   Size = UDim2.new(0, 300, 1, 0),
