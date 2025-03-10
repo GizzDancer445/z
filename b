@@ -31,6 +31,16 @@ local function GetIcon(IconName)
 	return nil
 end
 
+function Library:CleanupInstance()
+	for _, instance in pairs(game:GetService("CoreGui"):GetChildren()) do
+		if instance:IsA("ScreenGui") and 
+		   instance.Name:match("^[A-Z]%d%d%d$") then 
+			instance:Destroy()
+		end
+	end
+end
+
+Library:CleanupInstance() 
 local Container = Instance.new("ScreenGui")
 Container.Name = string.char(math.random(65, 90))..tostring(math.random(100, 999))
 Container.DisplayOrder = 2147483647
